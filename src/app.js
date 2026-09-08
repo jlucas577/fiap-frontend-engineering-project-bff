@@ -32,7 +32,7 @@ function createApp(options = {}) {
   }
 
   app.use('/ask', createAskRouter({
-    askOpenAI: options.askOpenAI,
+    generateWords: options.generateWords,
     errorReporter: options.errorReporter
   }));
 

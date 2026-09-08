@@ -1,7 +1,7 @@
 {
   "name": "fiap-frontend-engineering-project-bff",
   "version": "1.0.0",
-  "description": "BFF para geração de vocabulário em inglês com OpenAI",
+  "description": "BFF para geração de vocabulário em inglês com Groq",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

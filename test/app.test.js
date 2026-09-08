@@ -11,9 +11,9 @@ test('exporta uma aplicação Express compatível com a Vercel', () => {
   assert.equal(typeof app.handle, 'function');
 });
 
-async function startTestServer(askOpenAI) {
+async function startTestServer(generateWords) {
   const app = createApp({
-    askOpenAI,
+    generateWords,
     disableRateLimit: true,
     errorReporter: { noticeError() {} }
   });
@@ -66,7 +66,7 @@ test('GET /ask devolve diretamente o array de palavras', async (context) => {
 
 test('GET /ask expõe um erro conhecido sem detalhes internos', async (context) => {
   const server = await startTestServer(async () => {
-    throw new AppError('OPENAI_REQUEST_ERROR', 'Falha externa.', 502);
+    throw new AppError('GROQ_REQUEST_ERROR', 'Falha externa.', 502);
   });
   context.after(server.close);
 
@@ -74,6 +74,6 @@ test('GET /ask expõe um erro conhecido sem detalhes internos', async (context) 
 
   assert.equal(response.status, 502);
   assert.deepEqual(await response.json(), {
-    error: { code: 'OPENAI_REQUEST_ERROR', message: 'Falha externa.' }
+    error: { code: 'GROQ_REQUEST_ERROR', message: 'Falha externa.' }
   });
 });

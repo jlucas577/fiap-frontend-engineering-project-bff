@@ -3,25 +3,25 @@ const axios = require('axios');
 const { wordsResponseFormat, validateWords } = require('../contracts/wordsContract');
 const { AppError } = require('../errors/appError');
 
-const openAIEndpoint = 'https://api.openai.com/v1/chat/completions';
+const groqEndpoint = 'https://api.groq.com/openai/v1/chat/completions';
 
-async function askOpenAI(options = {}) {
-  const apiKey = options.apiKey ?? process.env.OPENAI_API_KEY;
-  const model = options.model ?? process.env.OPENAI_MODEL ?? 'gpt-4o-mini';
+async function generateWords(options = {}) {
+  const apiKey = options.apiKey ?? process.env.GROQ_API_KEY;
+  const model = options.model ?? process.env.GROQ_MODEL ?? 'openai/gpt-oss-20b';
   const httpClient = options.httpClient ?? axios;
 
   if (!apiKey) {
-    throw new AppError('CONFIGURATION_ERROR', 'A variável OPENAI_API_KEY não foi configurada.', 500);
+    throw new AppError('CONFIGURATION_ERROR', 'A variável GROQ_API_KEY não foi configurada.', 500);
   }
 
   let response;
 
   try {
-    response = await httpClient.post(openAIEndpoint, {
+    response = await httpClient.post(groqEndpoint, {
       model,
       messages: [
         {
-          role: 'developer',
+          role: 'system',
           content: 'Você é um professor de inglês para estudantes brasileiros.'
         },
         {
@@ -35,12 +35,12 @@ async function askOpenAI(options = {}) {
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json'
       },
-      timeout: 30_000
+      timeout: 10_000
     });
   } catch (error) {
     throw new AppError(
-      'OPENAI_REQUEST_ERROR',
-      'Não foi possível consultar o serviço da OpenAI.',
+      'GROQ_REQUEST_ERROR',
+      'Não foi possível consultar o serviço do Groq.',
       502,
       { cause: error }
     );
@@ -49,7 +49,7 @@ async function askOpenAI(options = {}) {
   const content = response.data?.choices?.[0]?.message?.content;
 
   if (typeof content !== 'string') {
-    throw new AppError('OPENAI_RESPONSE_ERROR', 'A OpenAI retornou uma resposta sem conteúdo válido.', 502);
+    throw new AppError('GROQ_RESPONSE_ERROR', 'O Groq retornou uma resposta sem conteúdo válido.', 502);
   }
 
   let parsedContent;
@@ -57,10 +57,10 @@ async function askOpenAI(options = {}) {
   try {
     parsedContent = JSON.parse(content);
   } catch (error) {
-    throw new AppError('INVALID_JSON_RESPONSE', 'A OpenAI retornou um JSON inválido.', 502, { cause: error });
+    throw new AppError('INVALID_JSON_RESPONSE', 'O Groq retornou um JSON inválido.', 502, { cause: error });
   }
 
   return validateWords(parsedContent.words);
 }
 
-module.exports = { askOpenAI };
+module.exports = { generateWords };

@@ -1,7 +1,7 @@
 const express = require('express');
 
 const { AppError } = require('../errors/appError');
-const { askOpenAI: defaultAskOpenAI } = require('../services/openaiService');
+const { generateWords: defaultGenerateWords } = require('../services/groqService');
 
 const silentErrorReporter = { noticeError() {} };
 
@@ -15,12 +15,12 @@ function getDefaultErrorReporter() {
 
 function createAskRouter(options = {}) {
   const router = express.Router();
-  const askOpenAI = options.askOpenAI ?? defaultAskOpenAI;
+  const generateWords = options.generateWords ?? defaultGenerateWords;
   const errorReporter = options.errorReporter ?? getDefaultErrorReporter();
 
   router.get('/', async (request, response) => {
     try {
-      const words = await askOpenAI();
+      const words = await generateWords();
       response.status(200).json(words);
     } catch (error) {
       errorReporter.noticeError(error, {
