@@ -37,6 +37,18 @@ test('GET /health informa que o serviço está disponível', async (context) => 
   assert.deepEqual(await response.json(), { status: 'ok' });
 });
 
+test('GET / apresenta uma mensagem genérica da API', async (context) => {
+  const server = await startTestServer(async () => []);
+  context.after(server.close);
+
+  const response = await fetch(server.baseUrl);
+
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), {
+    message: 'FIAP Vocabulary BFF está em execução.'
+  });
+});
+
 test('GET /ask devolve diretamente o array de palavras', async (context) => {
   const words = Array.from({ length: 5 }, (_, index) => ({
     word: `word-${index}`,

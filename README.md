@@ -33,6 +33,16 @@ Este BFF fornece o conteúdo utilizado por uma aplicação de apoio ao estudo de
 
 ## Contrato da API
 
+### `GET /`
+
+Retorna `200 OK` com uma mensagem indicando que a API está em execução:
+
+```json
+{
+  "message": "FIAP Vocabulary BFF está em execução."
+}
+```
+
 ### `GET /ask`
 
 Retorna `200 OK` com um array contendo exatamente cinco itens:

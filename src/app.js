@@ -36,6 +36,12 @@ function createApp(options = {}) {
     errorReporter: options.errorReporter
   }));
 
+  app.get('/', (request, response) => {
+    response.status(200).json({
+      message: 'FIAP Vocabulary BFF está em execução.'
+    });
+  });
+
   app.get('/health', (request, response) => {
     response.status(200).json({ status: 'ok' });
   });
