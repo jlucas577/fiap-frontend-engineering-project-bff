@@ -136,19 +136,57 @@ Os testes usam dependências injetadas e não consomem a cota do Groq.
 
 ## Deploy
 
-O projeto pode ser publicado como um Web Service no Render ou em outra plataforma compatível com Node.js.
+O BFF pode ser publicado gratuitamente na Vercel como uma única Vercel Function. A plataforma reconhece automaticamente a aplicação Express exportada por `src/app.js`, portanto não é necessário criar um arquivo `vercel.json`.
 
-### Exemplo no Render
+### Pré-requisitos
 
-1. Publique este repositório no GitHub.
-2. No Render, crie um novo **Web Service** conectado ao repositório.
-3. Configure o comando de instalação como `npm ci`.
-4. Configure o comando de inicialização como `npm start`.
-5. Cadastre `GROQ_API_KEY` e `GROQ_MODEL` nas variáveis do serviço.
-6. Defina `CORS_ORIGIN` com a URL pública do front-end.
-7. Faça o deploy e valide os endpoints `/health` e `/ask`.
+- Repositório publicado no GitHub.
+- Conta na [Vercel](https://vercel.com/).
+- Chave criada no [Groq Console](https://console.groq.com/keys).
 
-A plataforma fornece `PORT` automaticamente. Nunca publique o arquivo `.env` nem exponha a chave do Groq no front-end.
+### Deploy pelo painel da Vercel
+
+1. Acesse [vercel.com/new](https://vercel.com/new) e entre com o GitHub.
+2. Importe este repositório.
+3. Mantenha o **Root Directory** apontando para a raiz do projeto.
+4. Caso seja solicitado um framework, selecione **Other**. Não configure **Build Command** nem **Output Directory**.
+5. Em **Settings > Environment Variables**, adicione:
+
+   | Variável | Valor recomendado |
+   | --- | --- |
+   | `GROQ_API_KEY` | Chave privada iniciada por `gsk_` |
+   | `GROQ_MODEL` | `openai/gpt-oss-20b` |
+   | `CORS_ORIGIN` | URL pública do front-end ou `*` durante o desenvolvimento |
+   | `NEW_RELIC_APP_NAME` | `FIAP Vocabulary BFF` |
+   | `NEW_RELIC_LICENSE_KEY` | Chave do New Relic, caso o monitoramento seja utilizado |
+
+6. Habilite as variáveis para **Production** e, se necessário, também para **Preview**.
+7. Clique em **Deploy**.
+
+A Vercel instala as dependências e gerencia a porta da função automaticamente. Não cadastre `PORT` no painel. Nunca publique o arquivo `.env` nem exponha `GROQ_API_KEY` ou `NEW_RELIC_LICENSE_KEY` no front-end.
+
+### Validação do deploy
+
+Após a publicação, substitua `URL_DA_API` pelo domínio fornecido pela Vercel:
+
+```bash
+curl https://URL_DA_API/
+curl https://URL_DA_API/health
+curl https://URL_DA_API/ask
+```
+
+Os dois primeiros endpoints devem responder imediatamente. `/ask` deve retornar um array com cinco palavras. Caso ocorra uma falha, consulte **Deployments > Logs** no painel da Vercel.
+
+### Atualizações
+
+Depois que o projeto estiver conectado ao GitHub, cada push na branch principal gera um novo deploy de produção. Branches e pull requests geram deployments de Preview. Alterações nas variáveis de ambiente só entram em vigor após um novo deploy.
+
+Também é possível publicar pela [Vercel CLI](https://vercel.com/docs/cli):
+
+```bash
+npx vercel
+npx vercel --prod
+```
 
 ### URLs públicas
 
