@@ -4,6 +4,13 @@ const test = require('node:test');
 const { createApp } = require('../src/app');
 const { AppError } = require('../src/errors/appError');
 
+test('exporta uma aplicação Express compatível com a Vercel', () => {
+  const app = require('../src/app');
+
+  assert.equal(typeof app, 'function');
+  assert.equal(typeof app.handle, 'function');
+});
+
 async function startTestServer(askOpenAI) {
   const app = createApp({
     askOpenAI,
