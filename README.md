@@ -179,10 +179,6 @@ test/              # Testes automatizados
 | Rafael da Costa Fonseca | RM368026 |
 | Roberto Dias da Cruz Maia | RM368380 |
 
-## Status
-
-Em desenvolvimento para entrega da atividade de Front-end Engineering da FIAP.
-
 ## Referências
 
 - [Como escrever um README no GitHub — Alura](https://www.alura.com.br/artigos/escrever-bom-readme)
