@@ -1,0 +1,24 @@
+{
+  "name": "fiap-frontend-engineering-project-bff",
+  "version": "1.0.0",
+  "description": "BFF para geração de vocabulário em inglês com OpenAI",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test",
+    "test:watch": "node --test --watch"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "dependencies": {
+    "axios": "^1.9.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.17.1",
+    "express-rate-limit": "^7.5.0",
+    "newrelic": "^12.20.0"
+  },
+  "author": "Grupo FIAP Front-end Engineering",
+  "license": "ISC"
+}
