@@ -72,7 +72,7 @@ Retorna `200 OK` quando o processo está disponível:
 
 ## Tecnologias
 
-- Node.js 18 ou superior.
+- Node.js 22 ou superior.
 - Express para a API HTTP.
 - Axios para comunicação com a OpenAI.
 - OpenAI Chat Completions com Structured Outputs.
@@ -84,7 +84,7 @@ Retorna `200 OK` quando o processo está disponível:
 
 ### Pré-requisitos
 
-- Node.js 18.17 ou superior.
+- Node.js 22 ou superior.
 - npm.
 - Uma chave válida da API da OpenAI.
 
